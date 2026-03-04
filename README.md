@@ -16,6 +16,18 @@ The recommended way to install groopsio is in a conda environment:
     conda create -n groopsio_env
     conda activate groopsio_env
 
+or:
+
+    python -m venv groopsio_env
+    cd groopsio_env/
+    source /bin/activate
+    
+In the virtual environment:
+
+    pip install matplotlib 
+    pip install "numpy<2"
+
+
 To install the current development version of the package, first clone the repository or download the zip archive.
 Depending on your platform run
 
