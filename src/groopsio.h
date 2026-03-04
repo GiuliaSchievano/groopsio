@@ -38,7 +38,6 @@
 #include "files/fileGnssAntennaDefinition.h"
 #include "files/fileGnssReceiverDefinition.h"
 #include "files/fileGnssSignalBias.h"
-#include "files/fileGnssStationInfo.h"
 #include "files/fileGriddedData.h"
 #include "files/fileGriddedDataTimeSeries.h"
 #include "files/fileInstrument.h"
