@@ -44,7 +44,11 @@ class BuildCMakeExt(build_ext):
         else:
             groops_dir = pathlib.Path(groops_env_var)
 
-        cmake_command = ['cmake', '..', '-DGROOPS_SOURCE_DIR={0}'.format(groops_dir), '-DEXTENSION_LIBRARY_NAME={0}'.format(extension_name)]
+        cmake_command = [
+            'cmake', '..',
+            f'-DGROOPS_SOURCE_DIR={groops_dir}',
+            f'-DEXTENSION_LIBRARY_NAME={extension_name}']
+
         if os.name == 'nt':
             cmake_command.extend(['-G', 'MinGW Makefiles'])
         self.spawn(cmake_command)
@@ -65,5 +69,5 @@ setup(
     ext_modules=[CMakeExtension(name="groopsiobase")],
     license='GPL-3.0',
     cmdclass={'build_ext': BuildCMakeExt},
-    install_requires=['cmake>=3.16', 'numpy']
+    install_requires=['cmake>=3.16', 'numpy>=2','matplotlib']
 )

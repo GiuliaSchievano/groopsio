@@ -3,9 +3,12 @@ cmake_minimum_required(VERSION 3.16)
 project(groopsio LANGUAGES CXX Fortran)
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Python COMPONENTS Development NumPy)
-include_directories(${Python_INCLUDE_DIRS})
-include_directories(${Python_NumPy_INCLUDE_DIRS})
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy; print(numpy.get_include())" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+
+#set(LAPACK_DIR "${HOME_DIR}/Software/lapack-3.12.0")
+set(BASE_LIBRARIES ${EXPAT_LIBRARIES} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES} ${LIB_Z} ${Python3_LIBRARIES} stdc++fs)
 
 find_package(EXPAT  REQUIRED)
 include_directories(${EXPAT_INCLUDE_DIRS})
@@ -21,7 +24,6 @@ else()
   message(WARNING "Z library *NOT* found (https://www.zlib.net). groopsio will not be able to read/write compressed *.gz files.")
 endif()
 
-set(BASE_LIBRARIES ${EXPAT_LIBRARIES} ${BLAS_LIBRARIES} ${LIB_Z} ${Python_LIBRARIES} stdc++fs)
 
 include(sources.list)
 set(GROOPS_SOURCE_DIR "" CACHE PATH "path to GROOPS source directory")
@@ -34,4 +36,5 @@ add_library(${EXTENSION_LIBRARY_NAME} SHARED ${PROJECT_SOURCE_DIR}/src/groopsio.
 SET_TARGET_PROPERTIES(${EXTENSION_LIBRARY_NAME} PROPERTIES SUFFIX "")
 SET_TARGET_PROPERTIES(${EXTENSION_LIBRARY_NAME} PROPERTIES PREFIX "")
 
-target_link_libraries(${EXTENSION_LIBRARY_NAME} ${BASE_LIBRARIES})
+target_include_directories(${EXTENSION_LIBRARY_NAME} PRIVATE ${NUMPY_INCLUDE_DIR})
+target_link_libraries(${EXTENSION_LIBRARY_NAME} PRIVATE ${EXPAT_LIBRARIES} ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES} ${LIB_Z} Python3::Python)
